@@ -1044,8 +1044,10 @@ void InnerWidget::paintEvent(QPaintEvent *e) {
 		.insideCommunity = communityModeShown(),
 	};
 	const auto fillGuard = gsl::finally([&] {
-		// We translate painter down, but it'll be cropped below rect.
+		p.save();
+		p.setCompositionMode(QPainter::CompositionMode_Source);
 		p.fillRect(rect(), context.currentBg);
+		p.restore();
 	});
 	const auto paintRow = [&](
 			not_null<Row*> row,
@@ -1097,6 +1099,7 @@ void InnerWidget::paintEvent(QPaintEvent *e) {
 			? (row->key() == _chatPreviewRow.key)
 			: selected;
 		const auto cacheAllowed = _rowsScrollCache.scrolling()
+			&& (context.currentBg->color().alpha() == 255)
 			&& (!videoUserpic || !context.narrow)
 			&& !active
 			&& !cacheSelected
@@ -1894,6 +1897,8 @@ void InnerWidget::paintPeerSearchResult(
 		not_null<const PeerSearchResult*> result,
 		const Ui::PaintContext &context) {
 	QRect fullRect(0, 0, context.width, st::dialogsRowHeight);
+	p.save();
+	p.setCompositionMode(QPainter::CompositionMode_Source);
 	p.fillRect(
 		fullRect,
 		(context.active
@@ -1901,6 +1906,7 @@ void InnerWidget::paintPeerSearchResult(
 			: context.selected
 			? st::dialogsBgOver
 			: currentBg()));
+	p.restore();
 	if (!context.active) {
 		result->row.paintRipple(p, 0, 0, context.width);
 	}

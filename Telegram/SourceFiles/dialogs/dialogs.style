@@ -318,7 +318,7 @@ dialogsFilter: InputField(defaultInputField) {
 	placeholderFont: normalFont;
 
 	borderFg: filterInputInactiveBg;
-	borderFgActive: windowBgRipple;
+	borderFgActive: filterInputActiveBg;
 	borderFgError: activeLineFgError;
 
 	border: 3px;

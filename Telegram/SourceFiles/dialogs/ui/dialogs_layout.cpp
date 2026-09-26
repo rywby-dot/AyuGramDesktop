@@ -493,7 +493,10 @@ void PaintRow(
 	if (swipeTranslation) {
 		p.translate(-swipeTranslation, 0);
 	}
+	p.save();
+	p.setCompositionMode(QPainter::CompositionMode_Source);
 	p.fillRect(geometry, bg);
+	p.restore();
 	if (!(flags & Flag::TopicJumpRipple)) {
 		auto ripple = context.active
 			? st::dialogsRippleBgActive
@@ -1427,9 +1430,12 @@ void PaintCollapsedRow(
 		const QString &text,
 		int unread,
 		const PaintContext &context) {
+	p.save();
+	p.setCompositionMode(QPainter::CompositionMode_Source);
 	p.fillRect(
 		QRect{ 0, 0, context.width, st::dialogsImportantBarHeight },
 		context.selected ? st::dialogsBgOver : context.currentBg);
+	p.restore();
 
 	row.paintRipple(p, 0, 0, context.width);
 
